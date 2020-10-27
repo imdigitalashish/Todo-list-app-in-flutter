@@ -51,5 +51,32 @@ class DatabaseHelper {
       taskList.add(Task.fromMap(taskMap));
     });
     return taskList;
-   }
+  }
+
+  Future<int> insertTask(Task task) async {
+    Database db = await this.db;
+    final int result = await db.insert(tasksTable, task.toMap());
+    return result;
+  }
+
+  Future<int> updateTask(Task task) async {
+    Database db = await this.db;
+    final int result = await db.update(
+      tasksTable,
+      task.toMap(),
+      where: "$colId = ?",
+      whereArgs: [task.id],
+    );
+    return result;
+  }
+
+  Future<int> deleteTask(int id) async {
+    Database db = await this.db;
+    final int result = await db.delete(
+      tasksTable,
+      where: "$colId = ?",
+      whereArgs: [id],
+    );
+    return result;
+  }
 }
